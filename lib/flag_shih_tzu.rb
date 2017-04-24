@@ -312,13 +312,14 @@ To turn off this warning set check_for_column: false in has_flags definition her
     end
 
     def parse_flag_options(*args)
+      _ruby_ver24 = Gem::Version.create(RUBY_VERSION) > Gem::Version.create("2.3")
       options = args.shift
       add_options = if args.size >= 1
                       args.shift
                     else
                       options.
                       keys.
-                      select { |key| !key.is_a?(Fixnum) }.
+                      select { |key| !key.is_a?(_ruby_ver24 ? Integer : Fixnum) }.
                       inject({}) do |hash, key|
                         hash[key] = options.delete(key)
                         hash
